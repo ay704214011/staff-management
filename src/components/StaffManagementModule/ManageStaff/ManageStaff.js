@@ -2,15 +2,32 @@
 
 import React, { Component } from 'react';
 import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent/';
+import { AutoComplete } from '@progress/kendo-react-dropdowns';
 import $ from 'jquery';
 
 export default class ManageStaff extends Component {
+
+	state = {
+	  staffList: [{
+		name: 'Ram Sahay',
+		department: 'Driver',
+	  },
+	  {
+		name: 'Ram Swaroop',
+		department: 'Driver',
+	  },
+	  {
+		name: 'Mangat Ram',
+		department: 'Loader',
+	  }]
+	}
 
 	onSubmit () {
 	  console.log('on submit ', $('input'));
 	}
 
 	render () {
+		const { staffList } = this.state;
 		return (
 		  <div>
 		   <p className="section-title">Manage Staff </p>
@@ -19,12 +36,7 @@ export default class ManageStaff extends Component {
 		   <div className="form-row" >
 		    <div className="col" > 
 		     <label for="">Select Staff</label>
-		     <select className="form-control" id="staff">
-	            <option>Select</option>
-	            <option>Ram Sahay - (Driver)</option>
-	            <option>Ram Swaroop - (Driver)</option>
-	            <option>Mangat Ram - (Loader)</option>
-	          </select>
+			<AutoComplete data={staffList} placeholder="e.g. Ram chandra" textField="name" className="form-control" />
 		    </div>
 		    <div className="col" >
 		    </div>

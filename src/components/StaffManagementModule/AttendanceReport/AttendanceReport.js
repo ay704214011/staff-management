@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DatePickerComponent from '../../UIComponents/DatePickerComponent/';
-import { CURRENCY_SYMBOL } from './AttendanceReportConstants';
+import { AutoComplete } from '@progress/kendo-react-dropdowns';
 
 export default class AttndanceReport extends Component {
 
@@ -52,12 +52,34 @@ export default class AttndanceReport extends Component {
  		Name: 'Ram Swaroop',
         regularPayment: '250.00',
         AdvancePayment: ''
- 	}]
+	 }],
+	 staffList: [{
+		name: 'Ram Sahay',
+		department: 'Driver',
+	  },
+	  {
+		name: 'Ram Swaroop',
+		department: 'Driver',
+	  },
+	  {
+		name: 'Mangat Ram',
+		department: 'Loader',
+	  }]
+ }
+
+ getTotalPayment (paymentType) {
+	 const { attendanceDetails } = this.state;
+	 const totalPayment = attendanceDetails.reduce((acc, attendance) => {
+       return Number(acc + Number(attendance[paymentType]));
+	 }, 0);
+	 return totalPayment.toFixed(2);
  }
 
  render () {
-     const { attendanceDetails } = this.state;
+     const { attendanceDetails, staffList } = this.state;
  	return (<>
+	     <p className="section-title">Attendance</p>
+		 <hr/>
  		 <div className="form-group">
  		 <div className="form-row" >
           <div className="col" > 
@@ -70,6 +92,18 @@ export default class AttndanceReport extends Component {
 		    </div>
  		 </div>
  		 </div>
+		<div className="form-group">
+ 		 <div className="form-row" >
+          <div className="col" > 
+		     <label htmlFor="">Select Staff</label>
+			 <AutoComplete data={staffList} placeholder="e.g. Ram chandra" textField="name" className="form-control" />
+		    </div>
+		    <div className="col" >
+ 		 </div>
+ 		 </div>
+		</div>
+		<div className="form-group">
+		<div className="form-row" >
  		<table class="table table-hover table-striped">
  		<thead>
 		    <tr>
@@ -93,8 +127,14 @@ export default class AttndanceReport extends Component {
             <td>{attendance.AdvancePayment ? attendance.AdvancePayment : '-'}</td>
        	  </tr>)
        })}
-       </tbody>
+	   </tbody>
+	   <tfoot>
+	   <tr><td colspan="4">Total</td><td>{this.getTotalPayment('regularPayment')}</td><td>{this.getTotalPayment('AdvancePayment')}</td></tr>
+	   </tfoot>
        </table>
- 		</>);
+	   </div>
+	   </div>
+	   </>
+ 		);
   }
 }

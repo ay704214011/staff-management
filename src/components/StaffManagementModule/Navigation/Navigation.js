@@ -4,6 +4,7 @@ import './Navigation.css';
 import AddStaff from '../AddStaff/';
 import ManageStaff from '../ManageStaff/';
 import AttendanceReport from '../AttendanceReport/';
+import ExpenseReport from '../ExpenseReport/';
 import $ from 'jquery';
 
 export default class Navigation extends Component {
@@ -25,7 +26,10 @@ export default class Navigation extends Component {
            break;
         case 'attendance-report': 
            this.setState({activeTab: 'attendanceReport'});
-        break;
+           break;
+        case 'expense-report': 
+           this.setState({activeTab: 'expenseReport'});
+           break;
         default:
            break;
        }
@@ -44,6 +48,9 @@ export default class Navigation extends Component {
         case 'attendanceReport': 
             activeView = <AttendanceReport />;
            break;
+        case 'expenseReport': 
+           activeView = <ExpenseReport />;
+          break;
         default:
            break;
        }
@@ -63,6 +70,7 @@ export default class Navigation extends Component {
 		      <a class="nav-item nav-link active" href="#" onClick={this.setActiveTab.bind(this)} id="add-staff">Add Staff <span class="sr-only">(current)</span></a>
 		      <a class="nav-item nav-link" href="#" onClick={this.setActiveTab.bind(this)} id="manage-staff">Manage Staff</a>
 		      <a class="nav-item nav-link" href="#" onClick={this.setActiveTab.bind(this)} id="attendance-report">Attendance Report</a>
+            <a class="nav-item nav-link" href="#" onClick={this.setActiveTab.bind(this)} id="expense-report">Expense Report</a>
 		    </div>
 		  </div>
 		</nav>
