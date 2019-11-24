@@ -1,10 +1,28 @@
 /*** LabourDetailsComponenet ****/
 
 import React, { Component } from 'react';
-import DatePickerComponent from '../../UIComponents/DatePickerComponent/';
+import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent/';
+import { Dropdown } from 'primereact/dropdown';
 import $ from 'jquery';
+import * as moment from 'moment';
 
 export default class AddStaff extends Component {
+
+	state = {
+	  dateOfBirth: null,
+	  departmentList: [{
+		label: 'Loader Staff',
+		value: 'loaderStaff'
+	  },
+	  {
+		label: 'Driver Staff',
+		value: 'driverStaff'
+	  },
+	  {
+		label: 'CRU. Staff',
+		value: 'cruStaff'
+	  }]
+	}
 
 	componentDidMount () {
 	  this.$node = $(this.refs.datepicker);
@@ -14,7 +32,14 @@ export default class AddStaff extends Component {
 	  console.log('on submit ', $('input'));
 	}
 
+	onDobChange (e) {
+	  const dateOfBirth = moment(e.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+	  this.setState({dateOfBirth});
+	  console.log('date of birth ', dateOfBirth);
+	}
+
 	render () {
+		const { dateOfBirth, departmentList, department } = this.state;
 		return (
 		  <div>
 		   <p className="section-title">Add Staff </p>
@@ -39,19 +64,17 @@ export default class AddStaff extends Component {
 		  </div>
 		  <div className="col">
 		     <label for="">Joining Date</label>
-		     <DatePickerComponent />
+		     <DateTimePickerComponent value={dateOfBirth} onChange={(e) => this.onDobChange(e)} showIcon dateFormat="dd/mm/yyyy" yearNavigator yearRange="1970:2010"/>
 		   </div>
 		  </div>
 		  </div>
 		  <div className="form-group">
 		  <div className="form-row">
+		   <div className="col" >
            <label for="department">Department</label>
-           <select className="form-control" id="department">
-            <option>Select</option>
-            <option>Loader Staff</option>
-            <option>Driver Staff</option>
-            <option>CRU. Stadd</option>
-           </select>
+           <Dropdown value={department} options={departmentList} onChange={(e) => {this.setState({department: e.value})}} placeholder="Select department" className="form-control"/>
+		   </div>
+		   <div className="col" ></div>
 		  </div>
 		  </div>
 		  <div className="form-group">

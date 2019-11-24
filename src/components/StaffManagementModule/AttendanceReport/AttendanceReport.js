@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import DatePickerComponent from '../../UIComponents/DatePickerComponent/';
-import { AutoComplete } from '@progress/kendo-react-dropdowns';
+import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent/';
+import StaffSearch from '../StaffSearch/';
+import * as moment from 'moment';
 
 export default class AttndanceReport extends Component {
 
@@ -64,7 +65,9 @@ export default class AttndanceReport extends Component {
 	  {
 		name: 'Mangat Ram',
 		department: 'Loader',
-	  }]
+	  }],
+	  fromDate: null,
+	  toDate: null
  }
 
  getTotalPayment (paymentType) {
@@ -75,8 +78,18 @@ export default class AttndanceReport extends Component {
 	 return totalPayment.toFixed(2);
  }
 
+  onFromDateChange (e) {
+	const fromDate = moment(e.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+	this.setState({fromDate});
+  }
+
+  onToDateChange (e) {
+	const toDate = moment(e.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+	this.setState({toDate});
+  }
+
  render () {
-     const { attendanceDetails, staffList } = this.state;
+     const { attendanceDetails, fromDate, toDate } = this.state;
  	return (<>
 	     <p className="section-title">Attendance</p>
 		 <hr/>
@@ -84,11 +97,11 @@ export default class AttndanceReport extends Component {
  		 <div className="form-row" >
           <div className="col" > 
 		     <label htmlFor="">From:</label>
-		     <DatePickerComponent />
+			 <DateTimePickerComponent value={fromDate} onChange={(e) => this.onFromDateChange(e)} showIcon dateFormat="dd/mm/yyyy"/>
 		    </div>
 		    <div className="col" >
 		     <label HtmlFor="">To:</label>
-		     <DatePickerComponent />
+			 <DateTimePickerComponent value={toDate} onChange={(e) => this.onToDateChange(e)} showIcon dateFormat="dd/mm/yyyy"/>
 		    </div>
  		 </div>
  		 </div>
@@ -96,7 +109,7 @@ export default class AttndanceReport extends Component {
  		 <div className="form-row" >
           <div className="col" > 
 		     <label htmlFor="">Select Staff</label>
-			 <AutoComplete data={staffList} placeholder="e.g. Ram chandra" textField="name" className="form-control" />
+			 <StaffSearch />
 		    </div>
 		    <div className="col" >
  		 </div>

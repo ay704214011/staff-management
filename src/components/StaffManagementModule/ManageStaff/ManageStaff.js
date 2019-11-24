@@ -2,8 +2,9 @@
 
 import React, { Component } from 'react';
 import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent/';
-import { AutoComplete } from '@progress/kendo-react-dropdowns';
+import StaffSearch from '../StaffSearch/';
 import $ from 'jquery';
+import './ManageStaff.css';
 
 export default class ManageStaff extends Component {
 
@@ -19,15 +20,30 @@ export default class ManageStaff extends Component {
 	  {
 		name: 'Mangat Ram',
 		department: 'Loader',
-	  }]
+	  }],
+	  inTime: null,
+	  outTime: null,
 	}
 
 	onSubmit () {
 	  console.log('on submit ', $('input'));
 	}
 
+	onIntimeChange (e) {
+	  const inTime = e.value;
+	  console.log('In time ', inTime);
+	  console.log('Minutes  ', inTime.getMinutes());
+	  console.log('Hours  ', inTime.getHours());
+	  console.log('Seconds  ', inTime.getSeconds());
+	  this.setState({ inTime });
+	}
+
+	onOuttimeChange (e) {
+	  this.setState({ outTime: e.value });
+	}
+
 	render () {
-		const { staffList } = this.state;
+		const { inTime, outTime, selectedStaff, filterStaffSingle } = this.state;
 		return (
 		  <div>
 		   <p className="section-title">Manage Staff </p>
@@ -35,8 +51,8 @@ export default class ManageStaff extends Component {
 		   <div className="form-group">
 		   <div className="form-row" >
 		    <div className="col" > 
-		     <label for="">Select Staff</label>
-			<AutoComplete data={staffList} placeholder="e.g. Ram chandra" textField="name" className="form-control" />
+		     <label for="selectStaff">Select Staff</label>
+			 <StaffSearch />
 		    </div>
 		    <div className="col" >
 		    </div>
@@ -46,11 +62,11 @@ export default class ManageStaff extends Component {
 		   <div className="form-row" >
 		    <div className="col" > 
 		     <label for="">In time:</label>
-			 <DateTimePickerComponent />
+			 <DateTimePickerComponent value={inTime} onChange={(e) => this.onIntimeChange(e)} showTime showSeconds timeOnly hourFormat="12"/>
 		    </div>
 		    <div className="col" >
 		     <label for="">Out time:</label>
-		     <DateTimePickerComponent />
+		     <DateTimePickerComponent value={outTime} onChange={(e) => this.onOuttimeChange(e)} showTime showSeconds timeOnly hourFormat="12"/>
 		    </div>
 		   </div>
 		   </div>

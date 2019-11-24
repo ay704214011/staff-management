@@ -1,0 +1,15 @@
+.border-width-0 {
+  border: 0;
+}
+
+.padding-left-0 {
+    padding-left: 0;
+}
+
+.p-autocomplete input {
+  width: 100%;
+}
+
+#selectStaff {
+  width: 100%;
+}

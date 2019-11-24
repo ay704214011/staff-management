@@ -1,36 +1,29 @@
 import React, { Component } from 'react';
-import {
-	Chart,
-    ChartValueAxis,
-    ChartValueAxisItem,
-    ChartCategoryAxis,
-    ChartCategoryAxisItem,
-    ChartSeries,
-    ChartSeriesItem
-  } from '@progress/kendo-react-charts';
+import { Chart } from 'primereact/chart';
 
 export default class ExpenseReport extends Component {
 
  state = {
-   months: ['Jan', 'Feb', 'March', 'April', 'May', 'June']
+	expenseData: {
+		labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+		datasets: [
+			{
+				label: 'Monthly expense',
+				data: [65, 59, 80, 81, 56, 55, 40],
+				fill: false,
+				backgroundColor: '#42A5F5',
+				borderColor: '#42A5F5'
+			}
+		]   
+	}
  }
 
  render () {
-	 const { months } = this.state;
+	 const { expenseData } = this.state;
  	return (<>
 	     <p className="section-title">Expense Report</p>
 		 <hr/>
-		 <Chart>
-			<ChartValueAxis>
-				<ChartValueAxisItem title={{ text: "expense(Rs)" }} min={0} max={10000} />
-			</ChartValueAxis>
-			<ChartCategoryAxis>
-				<ChartCategoryAxisItem categories={months} />
-			</ChartCategoryAxis>
-			<ChartSeries>
-				<ChartSeriesItem data={[5500, 5200, 6000, 6500, 7000, 4500]} type="line" />
-			</ChartSeries>
-		</Chart>
+		 <Chart type="line" data={expenseData} />
 	     </>);
   }
 }
