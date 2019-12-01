@@ -40,16 +40,16 @@ export default class Navigation extends Component {
    	  let activeView = '';
       switch (activeTab) {
        	case 'addStaff': 
-           activeView = <AddStaff />;
+           activeView = <AddStaff {...this.props}/>;
            break;
         case 'manageStaff': 
-            activeView = <ManageStaff />;
+            activeView = <ManageStaff {...this.props}/>;
            break;
         case 'attendanceReport': 
-            activeView = <AttendanceReport />;
+            activeView = <AttendanceReport {...this.props}/>;
            break;
         case 'expenseReport': 
-           activeView = <ExpenseReport />;
+           activeView = <ExpenseReport {...this.props} />;
           break;
         default:
            break;

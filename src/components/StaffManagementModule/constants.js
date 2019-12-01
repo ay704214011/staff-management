@@ -1,0 +1,4 @@
+export const ACTIONS = {
+  ADD_STAFF: 'ADD_STAFF',
+  ADD_ATTENDANCE: 'ADD_ATTENDANCE' 
+};

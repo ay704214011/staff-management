@@ -5,11 +5,16 @@ import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent/
 import { Dropdown } from 'primereact/dropdown';
 import $ from 'jquery';
 import * as moment from 'moment';
+import { find } from 'lodash';
 
 export default class AddStaff extends Component {
 
 	state = {
 	  dateOfBirth: null,
+	  firstName: null,
+	  lastName: null,
+	  address: null,
+	  department: null,
 	  departmentList: [{
 		label: 'Loader Staff',
 		value: 'loaderStaff'
@@ -21,7 +26,9 @@ export default class AddStaff extends Component {
 	  {
 		label: 'CRU. Staff',
 		value: 'cruStaff'
-	  }]
+	  }],
+	  errors: {},
+	  isSuccess: false
 	}
 
 	componentDidMount () {
@@ -29,7 +36,47 @@ export default class AddStaff extends Component {
 	}
 
 	onSubmit () {
-	  console.log('on submit ', $('input'));
+	  const { addStaff, staffList } = this.props;
+	  const { firstName, lastName, dateOfBirth, department} = this.state;
+	  this.validate();
+	  const { errors } = this.state;
+	  const isValid = Object.keys(errors).length > 0 ? false : true;
+	  const fullName = firstName ? (lastName ? `${firstName} ${lastName}` : `${firstName}`) : '';
+	  if (isValid) {
+	    addStaff({
+		  firstName,
+		  lastName,
+		  dateOfBirth,
+		  department,
+		  fullName
+		});
+		this.setState( {isSuccess: true});
+	  }
+	  else {
+		this.setState( {isSuccess: false});
+	  }
+	}
+
+	validate () {
+	 const { firstName, lastName, errors } = this.state;
+	 const { staffList } = this.props;
+
+	 // FirstName
+	 if (!firstName) {
+	   errors.firstName = 'Please enter first Name';
+	 }
+	 else {
+	   const fullName = firstName ? (lastName ? `${firstName} ${lastName}` : `${firstName}`) : '';
+	   const isDuplicate = find(staffList, { fullName });
+	   if (isDuplicate) {
+	     errors.firstName = 'Staff is already added';
+	   }
+	   else {
+	     delete errors.firstName;
+	   }
+	 }
+
+	 this.setState({ errors });
 	}
 
 	onDobChange (e) {
@@ -39,20 +86,26 @@ export default class AddStaff extends Component {
 	}
 
 	render () {
-		const { dateOfBirth, departmentList, department } = this.state;
+		const { dateOfBirth, departmentList, department, errors, isSuccess } = this.state;
+		console.log('errors ', errors);
 		return (
 		  <div>
+			{isSuccess && (<div class="alert alert-success" role="alert">Staff added successfully</div>)}
+			{Object.keys(errors).length > 0 && Object.keys(errors).map(key => {
+			return <div class="alert alert-danger" role="alert" key={key}>{errors[key]}</div>
+			})}
+		   
 		   <p className="section-title">Add Staff </p>
 		   <hr/>
 		   <div className="form-group">
 		   <div className="form-row" >
 		    <div className="col" > 
 		     <label for="">First Name</label>
-		     <input type="text" className="form-control" id="firstName" aria-describedby="firstName" />
+		     <input type="text" className="form-control" id="firstName" aria-describedby="firstName" onChange={(e) => {this.setState({firstName: e.currentTarget.value})}}/>
 		    </div>
 		    <div className="col" >
 		     <label for="staff-type">Last Name</label>
-		     <input type="text" className="form-control" id="lastName" aria-describedby="lastName" />
+		     <input type="text" className="form-control" id="lastName" aria-describedby="lastName" onChange={(e) => {this.setState({lastName: e.currentTarget.value})}} />
 		    </div>
 		    </div>
 		   </div>
@@ -60,7 +113,7 @@ export default class AddStaff extends Component {
 		   <div className="form-row" >
 		   <div className="col" >
 		    <label for="address">Address</label>
-		    <textarea  type="text" className="form-control" id="amount"></textarea>
+		    <textarea  type="text" className="form-control" id="amount" onChange={(e) => {this.setState({address: e.currentTarget.value})}}></textarea>
 		  </div>
 		  <div className="col">
 		     <label for="">Joining Date</label>

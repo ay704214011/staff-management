@@ -3,14 +3,37 @@
 import React, { Component } from 'react';
 import Header from './Header/';
 import Navigation from './Navigation/';
+import { connect } from 'react-redux';
+import { get } from 'lodash';
+import { addStaff, addAttendance } from './actions';
  
-export default class StaffManagementModuleLayout extends Component {
+export class StaffManagementModuleLayout extends Component {
+
+   componentDidMount () {
+     console.log('props ', this.props);
+   }
+
    render () {
-     return (
-     	<>
+     return (<>
      	 <Header />
-     	 <Navigation />
-     	 </>
-      );
+     	 <Navigation {...this.props}/>
+         </>
+      )
    }
 }
+
+const mapStateToProps = state => {
+   return {
+     staffList: get(state, 'staffContainer.staffList', []),
+     attendanceRecordList: get(state, 'staffContainer.attendanceRecordList', [])
+   }
+ }
+
+const mapDispatchToProps = dispatch => {
+   return {
+     addStaff: (staff) => dispatch(addStaff(staff)),
+     addAttendance: (data) => dispatch(addAttendance(data))
+   }
+ }
+
+export default connect(mapStateToProps, mapDispatchToProps)(StaffManagementModuleLayout);

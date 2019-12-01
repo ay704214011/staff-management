@@ -1,78 +1,39 @@
 import React, { Component } from 'react';
 import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent/';
 import StaffSearch from '../StaffSearch/';
+import { filter } from 'lodash';
 import * as moment from 'moment';
 
 export default class AttndanceReport extends Component {
 
  state = {
- 	attendanceDetails: [{
- 		date: '01-11-2019',
- 		inTime: '09:00 AM',
- 		outTime: '06:00 PM',
- 		Name: 'Ram Swaroop',
-        regularPayment: '300.00',
-        AdvancePayment: ''
- 	},
- 	{
- 		date: '01-11-2019',
- 		inTime: '09:30 AM',
- 		outTime: '05:00 PM',
- 		Name: 'Hari Kishan',
-        regularPayment: '300.00',
-        AdvancePayment: '500.00'
- 	},
- 	{
- 		date: '01-11-2019',
- 		inTime: '10:00 AM',
- 		outTime: '05:00 AM',
- 		Name: 'Ram Swaroop',
-        regularPayment: '250.00',
-        AdvancePayment: ''
- 	},
- 	{
- 		date: '02-11-2019',
- 		inTime: '09:00 AM',
- 		outTime: '06:00 PM',
- 		Name: 'Ram Swaroop',
-        regularPayment: '300.00',
-        AdvancePayment: '100.00'
- 	},
- 	{
- 		date: '02-11-2019',
- 		inTime: '09:30 AM',
- 		outTime: '05:00 PM',
- 		Name: 'Hari Kishan',
-        regularPayment: '300.00',
-        AdvancePayment: ''
- 	},
- 	{
- 		date: '02-11-2019',
- 		inTime: '10:00 AM',
- 		outTime: '05:00 AM',
- 		Name: 'Ram Swaroop',
-        regularPayment: '250.00',
-        AdvancePayment: ''
-	 }],
-	 staffList: [{
-		name: 'Ram Sahay',
-		department: 'Driver',
-	  },
-	  {
-		name: 'Ram Swaroop',
-		department: 'Driver',
-	  },
-	  {
-		name: 'Mangat Ram',
-		department: 'Loader',
-	  }],
-	  fromDate: null,
-	  toDate: null
+   fromDate: null,
+   toDate: null,
+   selectedStaff: null
+ }
+
+ componentWillMount () {
+  const formattedRecordList = this.formatRecordList();
+  this.setState({filteredRecordList: formattedRecordList});
+ }
+
+ formatRecordList () {
+   const { attendanceRecordList } = this.props;
+   const formattedList = attendanceRecordList.map((record) => {
+	 record.inTimeFormatted = this.formatTime(record.inTime);
+	 record.outTimeFormatted = this.formatTime(record.outTime);
+	 return record;
+   });
+   return formattedList;
+ }
+
+ formatTime (time) {
+   return moment(time).format("hh:mm:ss A");
  }
 
  getTotalPayment (paymentType) {
-	 const { attendanceDetails } = this.state;
-	 const totalPayment = attendanceDetails.reduce((acc, attendance) => {
+	 const filteredRecordList = this.getFilteredList();
+	 const totalPayment = filteredRecordList.reduce((acc, attendance) => {
        return Number(acc + Number(attendance[paymentType]));
 	 }, 0);
 	 return totalPayment.toFixed(2);
@@ -88,8 +49,44 @@ export default class AttndanceReport extends Component {
 	this.setState({toDate});
   }
 
+  getFilteredList () {
+	const { selectedStaff, fromDate, toDate } = this.state;
+	const { attendanceRecordList } = this.props;
+	let filteredRecordList = attendanceRecordList;
+	if (selectedStaff) {
+	  filteredRecordList = filter(filteredRecordList, (record) => {
+	    return record.staffFullName === selectedStaff.fullName;
+	  });
+	}
+	if (fromDate) {
+	  filteredRecordList = filter(filteredRecordList, (record) => {
+		const recordDate = moment(record.date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+		const fromDateFormatted = moment(fromDate, 'DD-MM-YYYY').format('YYYY-MM-DD');
+	    return moment(recordDate).isSameOrAfter(fromDateFormatted, 'day');
+	  });
+	}
+	if (toDate) {
+	  filteredRecordList = filter(filteredRecordList, (record) => {
+		const recordDate = moment(record.date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+		const toDateFormatted = moment(toDate, 'DD-MM-YYYY').format('YYYY-MM-DD');
+	    return moment(recordDate).isSameOrBefore(toDateFormatted, 'day');
+	  });
+	}
+	return filteredRecordList;
+  }
+
+  onStaffSelected (selectedStaff) {
+	if (selectedStaff && selectedStaff.fullName) {
+	  this.setState({selectedStaff});
+	}
+	else {
+	  this.setState({ selectedStaff: null });
+	}
+  }
+
  render () {
-     const { attendanceDetails, fromDate, toDate } = this.state;
+	 const { fromDate, toDate } = this.state;
+	 const filteredRecordList = this.getFilteredList();
  	return (<>
 	     <p className="section-title">Attendance</p>
 		 <hr/>
@@ -100,7 +97,7 @@ export default class AttndanceReport extends Component {
 			 <DateTimePickerComponent value={fromDate} onChange={(e) => this.onFromDateChange(e)} showIcon dateFormat="dd/mm/yyyy"/>
 		    </div>
 		    <div className="col" >
-		     <label HtmlFor="">To:</label>
+		     <label htmlFor="">To:</label>
 			 <DateTimePickerComponent value={toDate} onChange={(e) => this.onToDateChange(e)} showIcon dateFormat="dd/mm/yyyy"/>
 		    </div>
  		 </div>
@@ -109,7 +106,7 @@ export default class AttndanceReport extends Component {
  		 <div className="form-row" >
           <div className="col" > 
 		     <label htmlFor="">Select Staff</label>
-			 <StaffSearch />
+			 <StaffSearch {...this.props} onStaffSelected={this.onStaffSelected.bind(this)} />
 		    </div>
 		    <div className="col" >
  		 </div>
@@ -121,28 +118,29 @@ export default class AttndanceReport extends Component {
  		<thead>
 		    <tr>
 		      <th scope="col">Date</th>
-		      <th scope="col">Name</th>
+		      <th scope="col">Full Name</th>
 		      <th scope="col">In Time</th>
 		      <th scope="col">Out Time</th>
 		      <th scope="col">Regular Payment (Rs)</th>
-		      <th scope="col">Advance (Rs)</th>
 		    </tr>
 		  </thead>
 		  <tbody>
-       {attendanceDetails.length && attendanceDetails.map((attendance, index) => {
+       {filteredRecordList.length > 0 && filteredRecordList.map((attendance, index) => {
        	  return (
        	  	<tr>
             <td>{attendance.date}</td>
-            <td>{attendance.Name}</td>
-            <td>{attendance.inTime}</td>
-            <td>{attendance.outTime}</td>
-            <td>{attendance.regularPayment}</td>
-            <td>{attendance.AdvancePayment ? attendance.AdvancePayment : '-'}</td>
+            <td>{attendance.staffFullName}</td>
+            <td>{attendance.inTimeFormatted}</td>
+            <td>{attendance.outTimeFormatted}</td>
+            <td>{attendance.regularAmount}</td>
        	  </tr>)
        })}
+	   {filteredRecordList.length === 0 && (<tr>
+		   <td colSpan="5"><p align="center">No reord found</p></td>
+	   </tr>)}
 	   </tbody>
 	   <tfoot>
-	   <tr><td colspan="4">Total</td><td>{this.getTotalPayment('regularPayment')}</td><td>{this.getTotalPayment('AdvancePayment')}</td></tr>
+	   <tr><td colSpan="4">Total</td><td>{this.getTotalPayment('regularAmount')}</td></tr>
 	   </tfoot>
        </table>
 	   </div>
