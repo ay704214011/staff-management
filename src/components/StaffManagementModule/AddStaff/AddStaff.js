@@ -6,6 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 import $ from 'jquery';
 import * as moment from 'moment';
 import { find } from 'lodash';
+import './AddStaff.css';
 
 export default class AddStaff extends Component {
 
@@ -117,7 +118,7 @@ export default class AddStaff extends Component {
 		  </div>
 		  <div className="col">
 		     <label for="">Joining Date</label>
-		     <DateTimePickerComponent value={dateOfBirth} onChange={(e) => this.onDobChange(e)} showIcon dateFormat="dd/mm/yyyy" yearNavigator yearRange="1970:2010"/>
+		     <DateTimePickerComponent value={dateOfBirth} onChange={(e) => this.onDobChange(e)} showIcon dateFormat="dd/mm/yyyy" yearNavigator yearRange="1970:2010" className="width-60"/>
 		   </div>
 		  </div>
 		  </div>

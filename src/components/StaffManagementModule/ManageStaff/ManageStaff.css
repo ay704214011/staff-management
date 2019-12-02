@@ -13,3 +13,7 @@
 #selectStaff {
   width: 100%;
 }
+
+.text-bold {
+  font-weight: bold;
+}

@@ -33,11 +33,6 @@ export default class ManageStaff extends Component {
 
 	onIntimeChange (e) {
 	  const inTime = e.value;
-	  console.log('In time ', inTime);
-	  console.log('Minutes  ', inTime.getMinutes());
-	  console.log('Hours  ', inTime.getHours());
-	  console.log('Seconds  ', inTime.getSeconds());
-	  console.log('Date ', inTime.getDate());
 	  this.setState({ inTime });
 	}
 
@@ -81,7 +76,7 @@ export default class ManageStaff extends Component {
 		   <div className="form-group">
 		   <div className="form-row" >
 		    <div className="col" > 
-		     <label for="selectStaff">* Select Staff</label>
+		     <label for="selectStaff"><span className="text-bold">*</span> Select Staff</label>
 			 <StaffSearch {...this.props} onStaffSelected={this.onStaffSelected.bind(this)} />
 		    </div>
 		    <div className="col" >
@@ -91,11 +86,11 @@ export default class ManageStaff extends Component {
 		   <div className="form-group">
 		   <div className="form-row" >
 		    <div className="col" > 
-		     <label for="">* In time:</label>
+		     <label for=""><span className="text-bold">*</span> In time:</label>
 			 <DateTimePickerComponent value={inTime} onChange={(e) => this.onIntimeChange(e)} showTime showSeconds timeOnly hourFormat="12"/>
 		    </div>
 		    <div className="col" >
-		     <label for="">* Out time:</label>
+		     <label for=""><span className="text-bold">*</span> Out time:</label>
 		     <DateTimePickerComponent value={outTime} onChange={(e) => this.onOuttimeChange(e)} showTime showSeconds timeOnly hourFormat="12"/>
 		    </div>
 		   </div>
