@@ -1,7 +1,7 @@
 
 // Header component
 import React, { Component } from 'react';
-import Header from './Header/';
+import Header from '../ModuleHeader/';
 import Navigation from './Navigation/';
 import { connect } from 'react-redux';
 import { get } from 'lodash';
@@ -15,7 +15,7 @@ export class StaffManagementModuleLayout extends Component {
 
    render () {
      return (<>
-     	 <Header />
+     	 <Header moduleName="Staff Management System"/>
      	 <Navigation {...this.props}/>
          </>
       )

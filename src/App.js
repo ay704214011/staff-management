@@ -1,7 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
-import Header from './components/Header/';
+import Header from './components/AppHeader';
 import StaffManagementModuleContainer from './components/StaffManagementModule/StaffManagementModuleContainer';
+// import ProductionModuleLayout from './components/ProductionModule/ProductionModuleLayout';
 // import './App.css';
 
 function App() {
