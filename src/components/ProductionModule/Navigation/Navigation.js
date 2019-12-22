@@ -1,7 +1,11 @@
 // Navigation component
 import React, { Component } from 'react';
 import './Navigation.css';
-import MaterialInput from '../MaterialInput/';
+import MaterialInputLayout from '../MaterialInputLayout';
+import ProductionInput from '../Production/ProductionInput';
+import ProductionOutput from '../Production/ProductionOutput';
+import ProductionReport from '../Production/ProductionReport';
+import { TreeTable } from 'primereact/treetable';
 import $ from 'jquery';
 
 export default class Navigation extends Component {
@@ -17,6 +21,15 @@ export default class Navigation extends Component {
        switch (tabId) {
        	case 'material-input': 
            this.setState({activeTab: 'materialInput'});
+		   break;
+		case 'production-input': 
+           this.setState({activeTab: 'productionInput'});
+		   break;
+		case 'production-output': 
+           this.setState({activeTab: 'productionOutput'});
+		   break;
+		case 'production-report': 
+           this.setState({activeTab: 'productionReport'});
            break;
         default:
            break;
@@ -28,7 +41,16 @@ export default class Navigation extends Component {
    	  let activeView = '';
       switch (activeTab) {
        	case 'materialInput': 
-           activeView = <MaterialInput {...this.props}/>;
+           activeView = <MaterialInputLayout {...this.props}/>;
+		   break;
+		case 'productionInput': 
+           activeView = <ProductionInput {...this.props}/>;
+		   break;
+		case 'productionOutput': 
+           activeView = <ProductionOutput {...this.props}/>;
+		   break;
+		case 'productionReport': 
+           activeView = <ProductionReport {...this.props}/>;
            break;
         default:
            break;
@@ -47,6 +69,9 @@ export default class Navigation extends Component {
 		  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		    <div class="navbar-nav">
 		      <a class="nav-item nav-link active" href="#" onClick={this.setActiveTab.bind(this)} id="material-input">Material Input<span class="sr-only">(current)</span></a>
+			  <a class="nav-item nav-link active" href="#" onClick={this.setActiveTab.bind(this)} id="production-input">Production Input<span class="sr-only">(current)</span></a>
+			  <a class="nav-item nav-link active" href="#" onClick={this.setActiveTab.bind(this)} id="production-output">Production Output<span class="sr-only">(current)</span></a>
+			  <a class="nav-item nav-link active" href="#" onClick={this.setActiveTab.bind(this)} id="production-report">Production Report<span class="sr-only">(current)</span></a>
 		    </div>
 		  </div>
 		</nav>

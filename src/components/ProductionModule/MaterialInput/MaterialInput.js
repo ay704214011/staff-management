@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import './MaterialInput.css';
 import DateTimePickerComponent from '../../UIComponents/DateTimePickerComponent';
-import MaterialInputOutputDetails from '../MaterialInputOutputDetails/';
 
 export default class MaterialInput extends Component {
 
@@ -10,7 +10,7 @@ export default class MaterialInput extends Component {
 
 	render () {
 	  return (
-		<>
+		<div className="section-container">
 	    <p className="section-title">Material entry details </p>
 		<hr/>
 	   <form>
@@ -40,7 +40,6 @@ export default class MaterialInput extends Component {
 	   </div>
 	   <button type="submit" class="btn btn-primary">Submit</button>
 	  </form>
-	  <MaterialInputOutputDetails />
-	  </>);
+	  </div>);
 	}
 }
